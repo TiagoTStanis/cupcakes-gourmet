@@ -1,0 +1,18 @@
+{% if pedido.status == 'CANCELADO' %}
+<section class="cartao pedido-cancelado">
+  <h2>Pedido cancelado</h2>
+  <p>{% if cancelamento %}{{ cancelamento.mensagem }}{% else %}Este pedido foi cancelado.{% endif %}</p>
+</section>
+{% else %}
+{% if pedido.status == 'AGUARDANDO_PAGAMENTO' %}<p>Aguardando pagamento.</p>{% endif %}
+<ol class="linha-tempo" aria-label="Etapas do pedido">
+  {% for etapa in etapas %}
+  <li class="{% if etapa.horario %}concluida{% endif %}" {% if etapa.atual %}aria-current="step"{% endif %}>
+    <strong>{{ etapa.nome }}</strong>
+    {% if etapa.horario %}<time datetime="{{ etapa.horario|date:'c' }}">{{ etapa.horario|date:"d/m/Y H:i" }}</time>{% else %}<span>Pendente</span>{% endif %}
+    {% if etapa.atual %}<span>Etapa atual</span>{% endif %}
+  </li>
+  {% endfor %}
+</ol>
+{% if previsao_entrega %}<p>Previsão de entrega: <strong>{{ previsao_entrega|date:"d/m/Y" }}</strong>.</p>{% endif %}
+{% endif %}

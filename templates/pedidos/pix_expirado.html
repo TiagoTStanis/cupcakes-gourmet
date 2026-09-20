@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  {% include "pedidos/aviso_pagamento.html" %}
+  <h1>PIX expirado</h1>
+  <p>O prazo de pagamento terminou. O pedido {{ pedido.numero }} foi cancelado e os itens foram liberados.</p>
+  <a class="botao" href="{% url 'catalogo:vitrine' %}">Escolher cupcakes novamente</a>
+</div>
+{% endblock %}

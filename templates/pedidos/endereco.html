@@ -1,0 +1,31 @@
+{% extends "pedidos/checkout_base.html" %}
+{% block etapa_checkout %}
+<h1>Endereço de entrega</h1>
+<p>Seus itens ficam reservados por 10 minutos. O frete será calculado pelo endereço escolhido.</p>
+<form method="post" class="checkout-formulario">
+  {% csrf_token %}
+  <fieldset class="checkout-opcoes">
+    <legend>Escolha onde receber</legend>
+    {% for endereco in enderecos %}
+    <label class="checkout-opcao">
+      <input type="radio" name="endereco_id" value="{{ endereco.pk }}" required {% if selecionado == endereco.pk|stringformat:'s' %}checked{% endif %}>
+      <span><strong>{{ endereco.logradouro }}, {{ endereco.numero }}</strong><br>
+      {% if endereco.complemento %}{{ endereco.complemento }}<br>{% endif %}
+      {{ endereco.bairro }} — {{ endereco.cidade }}/{{ endereco.uf }}<br>CEP {{ endereco.cep }}</span>
+    </label>
+    {% endfor %}
+    <label class="checkout-opcao">
+      <input type="radio" name="endereco_id" value="novo" required {% if novo_endereco %}checked{% endif %}>
+      <span>Cadastrar novo endereço</span>
+    </label>
+  </fieldset>
+  <fieldset id="checkout-novo-endereco" class="cartao">
+    <legend>Novo endereço</legend>
+    {{ formulario.as_p }}
+    <button type="button" class="secundario" id="checkout-consultar-cep" data-url="{% url 'pedidos:consultar_cep' %}">Preencher pelo CEP</button>
+    <p id="checkout-feedback-cep" role="status"></p>
+  </fieldset>
+  <button type="submit">Continuar para pagamento</button>
+  <a class="botao secundario" href="{% url 'carrinho:detalhe' %}">Voltar ao carrinho</a>
+</form>
+{% endblock %}

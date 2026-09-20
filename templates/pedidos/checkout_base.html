@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Finalizar pedido — Cupcakes Gourmet{% endblock %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  <nav aria-label="Etapas do checkout">
+    <ol class="checkout-progresso">
+      <li {% if etapa == 1 %}aria-current="step"{% endif %}><span>1</span>Endereço</li>
+      <li {% if etapa == 2 %}aria-current="step"{% endif %}><span>2</span>Pagamento</li>
+      <li {% if etapa == 3 %}aria-current="step"{% endif %}><span>3</span>Resumo</li>
+    </ol>
+  </nav>
+  {% block etapa_checkout %}{% endblock %}
+</div>
+<script src="{% static 'js/checkout.js' %}" defer></script>
+{% endblock %}

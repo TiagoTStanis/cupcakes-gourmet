@@ -1,0 +1,37 @@
+{% extends "pedidos/checkout_base.html" %}
+{% load static %}
+{% block etapa_checkout %}
+{% include "pedidos/aviso_pagamento.html" %}
+<h1 id="pagamento-titulo" tabindex="-1">Forma de pagamento</h1>
+<section class="cartao">
+  <h2>Confira o pedido</h2>
+  <ul class="checkout-itens">
+    {% for item in itens %}<li>{{ item.quantidade }} × {{ item.produto.nome }} <strong>R$ {{ item.subtotal }}</strong></li>{% endfor %}
+  </ul>
+  <p>Entrega: {{ endereco.logradouro }}, {{ endereco.numero }} — {{ endereco.cidade }}/{{ endereco.uf }}</p>
+  <div class="linha-resumo"><span>Subtotal</span><strong>{{ resumo.subtotal_formatado }}</strong></div>
+  <div class="linha-resumo"><span>Desconto</span><strong>{{ resumo.desconto_formatado }}</strong></div>
+  <div class="linha-resumo"><span>Frete</span><strong>{{ resumo.frete_formatado }}</strong></div>
+  <div class="linha-resumo linha-total"><span>Total antes dos juros</span><strong>{{ resumo.total_formatado }}</strong></div>
+</section>
+<form method="post" action="{% url 'pedidos:checkout_confirmar' %}" class="checkout-formulario" id="formulario-pagamento">
+  {% csrf_token %}
+  <fieldset class="checkout-opcoes">
+    <legend>Como deseja pagar?</legend>
+    {% for valor, nome in formas %}
+    <label class="checkout-opcao"><input type="radio" name="forma_pagamento" value="{{ valor }}" required {% if forma_selecionada == valor %}checked{% endif %}><span>{{ nome }}</span></label>
+    {% endfor %}
+  </fieldset>
+  {% include "pedidos/campos_cartao.html" %}
+  <section id="revisao-pagamento" class="cartao" hidden>
+    <h2>Revise antes de confirmar</h2>
+    <p>Confira os itens, o endereço e os valores acima.</p>
+    <p id="revisao-forma" role="status"></p>
+    <button type="button" id="pagamento-voltar" class="secundario">Alterar pagamento</button>
+  </section>
+  <p>Ao confirmar com PIX, o código fictício ficará disponível por 30 minutos.</p>
+  <button type="submit" id="pagamento-avancar">Confirmar pedido</button>
+  <a class="botao secundario" href="{% url 'pedidos:checkout_endereco' %}">Voltar ao endereço</a>
+</form>
+<script src="{% static 'js/pagamento.js' %}" defer></script>
+{% endblock %}

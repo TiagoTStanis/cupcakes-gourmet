@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block titulo %}Pedido {{ pedido.numero }} — Cupcakes Gourmet{% endblock %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  {% include "pedidos/aviso_pagamento.html" %}
+  <h1>Acompanhar pedido</h1>
+  {% include "pedidos/resumo_pedido.html" %}
+  <a class="botao" href="{% url 'pedidos:pedido_detalhe' pedido.numero %}#situacao-pedido">Acompanhar pedido</a>
+  <a class="botao secundario" href="{% url 'catalogo:vitrine' %}">Continuar comprando</a>
+</div>
+{% endblock %}

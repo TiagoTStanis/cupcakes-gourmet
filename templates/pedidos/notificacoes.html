@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titulo %}Notificações — Cupcakes Gourmet{% endblock %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  <h1>Notificações</h1>
+  <aside class="aviso-pagamento">Os avisos são internos e simulados. Não chegam por push no celular.</aside>
+  {% if notificacoes_nao_lidas %}
+  <form method="post" action="{% url 'pedidos:marcar_todas_lidas' %}">
+    {% csrf_token %}<button type="submit">Marcar todas como lidas</button>
+  </form>
+  {% endif %}
+  {% for aviso in notificacoes %}
+  <article class="cartao notificacao {% if not aviso.lida %}nao-lida{% endif %}">
+    <h2>{{ aviso.titulo }}</h2>
+    <p>{{ aviso.mensagem }}</p>
+    <time datetime="{{ aviso.criada_em|date:'c' }}">{{ aviso.criada_em|date:"d/m/Y H:i" }}</time>
+    <p>{% if aviso.lida %}Lida{% else %}Não lida{% endif %}</p>
+    {% if aviso.pedido %}<a class="checkout-link" href="{% url 'pedidos:pedido_detalhe' aviso.pedido.numero %}">Ver pedido {{ aviso.pedido.numero }}</a>{% endif %}
+    {% if not aviso.lida %}
+    <form method="post" action="{% url 'pedidos:marcar_notificacao_lida' aviso.pk %}">
+      {% csrf_token %}<button type="submit">Marcar como lida</button>
+    </form>
+    {% endif %}
+  </article>
+  {% empty %}<p>Você ainda não tem notificações.</p>{% endfor %}
+</div>
+{% endblock %}

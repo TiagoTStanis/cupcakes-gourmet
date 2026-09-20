@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  {% include "pedidos/aviso_pagamento.html" %}
+  <h1>Pagamento recusado</h1>
+  <p>{{ mensagem }}</p>
+  <a class="botao" href="{% url 'pedidos:checkout_pagamento' %}">Tentar outra forma de pagamento</a>
+</div>
+{% endblock %}

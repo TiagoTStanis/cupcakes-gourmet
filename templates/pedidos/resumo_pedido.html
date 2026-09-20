@@ -1,0 +1,17 @@
+{% include "pedidos/rastreamento.html" %}
+<section class="cartao" id="situacao-pedido">
+  <h2>Pedido {{ pedido.numero }}</h2>
+  <p>Status: {{ pedido.get_status_display }}</p>
+  <ul class="checkout-itens">
+    {% for item in pedido.itens.all %}<li><span>{{ item.quantidade }} × {{ item.nome_produto }}<small>R$ {{ item.preco_unitario }} cada</small></span><strong>R$ {{ item.subtotal }}</strong></li>{% endfor %}
+  </ul>
+  <p>{{ pedido.endereco_entrega|linebreaksbr }}</p>
+  <div class="linha-resumo"><span>Subtotal</span><strong>R$ {{ pedido.subtotal }}</strong></div>
+  <div class="linha-resumo"><span>Desconto</span><strong>R$ {{ pedido.valor_desconto }}</strong></div>
+  <div class="linha-resumo"><span>Frete</span><strong>R$ {{ pedido.valor_frete }}</strong></div>
+  <div class="linha-resumo linha-total"><span>Total do pedido</span><strong>R$ {{ pedido.valor_total }}</strong></div>
+  {% if pedido.forma_pagamento == 'CARTAO' %}
+  <p>{{ pedido.detalhes_pagamento.bandeira }} final {{ pedido.detalhes_pagamento.ultimos_digitos }}</p>
+  <p>{{ pedido.detalhes_pagamento.parcelas }}x de R$ {{ pedido.detalhes_pagamento.valor_parcela }}. Total com parcelamento: R$ {{ pedido.detalhes_pagamento.total }}.</p>
+  {% endif %}
+</section>

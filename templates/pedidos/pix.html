@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}PIX simulado — Cupcakes Gourmet{% endblock %}
+{% block conteudo %}
+<div class="checkout-pagina">
+  {% include "pedidos/aviso_pagamento.html" %}
+  <h1>PIX simulado</h1>
+  <p>Este QR é fictício. Use o botão abaixo para simular a confirmação.</p>
+  <div class="pix-qr">{{ qr|safe }}</div>
+  <p>Tempo restante: <strong id="pix-contador" data-expira-em="{{ pedido.pix_expira_em|date:'c' }}">até {{ pedido.pix_expira_em|date:'H:i' }}</strong></p>
+  <label for="pix-codigo">Código copia e cola fictício</label>
+  <textarea id="pix-codigo" readonly rows="3">{{ pedido.detalhes_pagamento.codigo }}</textarea>
+  <button type="button" id="pix-copiar" class="secundario">Copiar código</button>
+  <p id="pix-feedback" role="status"></p>
+  <form method="post" action="{% url 'pedidos:confirmar_pix' pedido.numero %}">
+    {% csrf_token %}
+    <button type="submit" id="pix-confirmar">Confirmar pagamento (simulação)</button>
+  </form>
+  {% include "pedidos/resumo_pedido.html" %}
+</div>
+<script src="{% static 'js/pagamento.js' %}" defer></script>
+{% endblock %}

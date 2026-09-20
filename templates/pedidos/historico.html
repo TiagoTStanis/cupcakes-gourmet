@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block titulo %}Meus Pedidos — Cupcakes Gourmet{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <h1>Meus pedidos</h1>
+
+  {% for pedido in pedidos %}
+  <article class="cartao pedido-card" id="pedido-{{ pedido.numero }}">
+    <header class="pedido-card-cabecalho">
+      <div>
+        <span class="pedido-numero">Pedido {{ pedido.numero }}</span>
+        <time class="pedido-data" datetime="{{ pedido.criado_em|date:'c' }}">{{ pedido.criado_em|date:"d/m/Y H:i" }}</time>
+      </div>
+      <span class="status-tag status-{{ pedido.status|lower }}">{{ pedido.get_status_display }}</span>
+    </header>
+
+    <div class="pedido-card-corpo">
+      <p class="pedido-itens-qtd">
+        {% if pedido.total_itens %}
+          {{ pedido.total_itens }} {% if pedido.total_itens == 1 %}item{% else %}itens{% endif %}
+        {% else %}
+          {{ pedido.itens.count }} {% if pedido.itens.count == 1 %}item{% else %}itens{% endif %}
+        {% endif %}
+      </p>
+      <p class="pedido-total">Total: <strong>R$ {{ pedido.valor_total }}</strong></p>
+    </div>
+
+    <footer class="pedido-card-acoes">
+      <a class="botao secundario" href="{% url 'pedidos:pedido_detalhe' pedido.numero %}">Ver detalhes</a>
+      <form method="post" action="{% url 'pedidos:repetir_pedido' pedido.numero %}">
+        {% csrf_token %}
+        <button type="submit" class="botao">Repetir pedido</button>
+      </form>
+    </footer>
+  </article>
+  {% empty %}
+  <div class="cartao carrinho-vazio">
+    <p>Você ainda não fez nenhum pedido. Que tal começar agora?</p>
+    <a class="botao" href="{% url 'catalogo:vitrine' %}">Ver catálogo de cupcakes</a>
+  </div>
+  {% endfor %}
+
+  {% if pagina.has_other_pages %}
+  <nav class="paginacao" aria-label="Navegação de páginas">
+    {% if pagina.has_previous %}
+      <a class="botao secundario paginacao-botao" href="?pagina={{ pagina.previous_page_number }}">Anterior</a>
+    {% else %}
+      <span class="botao secundario paginacao-botao desabilitado" aria-disabled="true">Anterior</span>
+    {% endif %}
+
+    <span class="paginacao-info">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+
+    {% if pagina.has_next %}
+      <a class="botao secundario paginacao-botao" href="?pagina={{ pagina.next_page_number }}">Próxima</a>
+    {% else %}
+      <span class="botao secundario paginacao-botao desabilitado" aria-disabled="true">Próxima</span>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

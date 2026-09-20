@@ -1,0 +1,37 @@
+{% extends "pedidos/checkout_base.html" %}
+{% load static %}
+{% block etapa_checkout %}
+<h1>Revise seu pedido</h1>
+{% include "pedidos/aviso_pagamento.html" %}
+<p class="checkout-reserva">Reserva de estoque: <strong id="checkout-contador" data-expira-em="{{ expira_em|date:'c' }}">até {{ expira_em|date:'H:i' }}</strong></p>
+<section class="cartao">
+  <h2>Seus cupcakes</h2>
+  <ul class="checkout-itens">
+    {% for item in itens %}
+    <li><span>{{ item.quantidade }} × {{ item.produto.nome }}<small>R$ {{ item.produto.preco }} cada</small></span><strong>R$ {{ item.subtotal }}</strong></li>
+    {% endfor %}
+  </ul>
+</section>
+<section class="cartao">
+  <h2>Entrega</h2>
+  <p>{{ endereco.logradouro }}, {{ endereco.numero }}{% if endereco.complemento %} — {{ endereco.complemento }}{% endif %}<br>
+  {{ endereco.bairro }} — {{ endereco.cidade }}/{{ endereco.uf }}<br>CEP {{ endereco.cep }}</p>
+  <p>Prazo: {{ resumo.prazo_dias }} dias úteis</p>
+  <a href="{% url 'pedidos:checkout_endereco' %}" class="checkout-link">Alterar endereço</a>
+  <h2>Pagamento</h2>
+  <p>{{ forma_pagamento }}</p>
+  <a href="{% url 'pedidos:checkout_pagamento' %}" class="checkout-link">Alterar pagamento</a>
+</section>
+<section class="cartao" aria-label="Resumo financeiro">
+  <div class="linha-resumo"><span>Subtotal</span><strong>{{ resumo.subtotal_formatado }}</strong></div>
+  <div class="linha-resumo"><span>Desconto{% if resumo.cupom_codigo %} ({{ resumo.cupom_codigo }}){% endif %}</span><strong>− {{ resumo.desconto_formatado }}</strong></div>
+  <div class="linha-resumo"><span>Frete</span><strong>{{ resumo.frete_formatado }}</strong></div>
+  <div class="linha-resumo linha-total"><span>Total</span><strong>{{ resumo.total_formatado }}</strong></div>
+</section>
+<form method="post" action="{% url 'pedidos:checkout_confirmar' %}" id="formulario-pagamento">
+  {% csrf_token %}
+  {% if cartao %}{% include "pedidos/campos_cartao.html" %}{% endif %}
+  <button type="submit">Confirmar pedido</button>
+</form>
+<script src="{% static 'js/pagamento.js' %}" defer></script>
+{% endblock %}

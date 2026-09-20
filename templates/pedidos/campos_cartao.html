@@ -1,0 +1,22 @@
+<fieldset id="dados-cartao" class="cartao">
+  <legend>Cartão de crédito</legend>
+  <p>Teste aprovado: 4111 1111 1111 1111. Teste recusado: 4000 0000 0000 0002.</p>
+  <label for="cartao-numero">Número do cartão</label>
+  <input id="cartao-numero" name="numero" inputmode="numeric" autocomplete="off" maxlength="23" required aria-describedby="erro-numero">
+  <p id="erro-numero" class="erro-campo" role="status">{{ erros.numero }}</p>
+  <label for="cartao-nome">Nome impresso no cartão</label>
+  <input id="cartao-nome" name="nome" autocomplete="off" maxlength="150" required aria-describedby="erro-nome">
+  <p id="erro-nome" class="erro-campo">{{ erros.nome }}</p>
+  <label for="cartao-validade">Validade (MM/AA)</label>
+  <input id="cartao-validade" name="validade" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="MM/AA" required aria-describedby="erro-validade">
+  <p id="erro-validade" class="erro-campo">{{ erros.validade }}</p>
+  <label for="cartao-cvv">CVV (3 dígitos)</label>
+  <input id="cartao-cvv" name="cvv" type="password" inputmode="numeric" autocomplete="off" maxlength="3" pattern="[0-9]{3}" required aria-describedby="erro-cvv">
+  <p id="erro-cvv" class="erro-campo">{{ erros.cvv }}</p>
+  <label for="cartao-parcelas">Parcelas</label>
+  <select id="cartao-parcelas" name="parcelas" required aria-describedby="erro-parcelas">
+    {% for opcao in parcelas %}<option value="{{ opcao.parcelas }}">{{ opcao.parcelas }}x de R$ {{ opcao.valor_parcela }} — total R$ {{ opcao.total }}{% if opcao.parcelas <= 3 %} (sem juros){% endif %}</option>{% endfor %}
+  </select>
+  <p id="erro-parcelas" class="erro-campo">{{ erros.parcelas }}</p>
+  <p>Até 3x sem juros. De 4x a 12x, juros compostos de 2,5% ao mês.</p>
+</fieldset>
