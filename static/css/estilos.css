@@ -11,13 +11,14 @@ h1, h2, h3, button, .botao { font-family: 'Poppins', sans-serif; line-height: 1.
 h1 { font-size: 1.65rem; } h2 { font-size: 1.3rem; } h3 { font-size: 1rem; }
 a { color: #a80d61; overflow-wrap: anywhere; }
 button, input, select, .botao, .link { min-height: 44px; font: inherit; }
+input, select, textarea { max-width: 100%; }
 button, .botao { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 12px 18px; border: 0; border-radius: 12px; background: var(--rosa); color: #212121; font-weight: 800; text-decoration: none; cursor: pointer; }
 button:hover, .botao:hover { filter: brightness(.95); }
 .secundario { background: #fff; border: 1px solid #a80d61; color: #a80d61; }
 .link { display: flex; align-items: center; justify-content: center; margin-top: 10px; }
 :focus-visible { outline: 3px solid #0D47A1; outline-offset: 3px; }
 .cabecalho { max-width: 480px; margin: auto; padding: 24px 18px 12px; }
-.cabecalho a { display: flex; align-items: center; gap: 6px; min-height: 44px; font: 600 1.35rem 'Poppins', sans-serif; text-decoration: none; }
+.cabecalho a { display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; min-height: 44px; font: 600 1.35rem 'Poppins', sans-serif; text-decoration: none; }
 .cabecalho span { display: block; font-size: .9rem; }
 main { max-width: 480px; margin: auto; padding: 12px 16px calc(110px + env(safe-area-inset-bottom)); }
 .cartao { padding: 22px; margin-bottom: 18px; border-radius: 18px; background: var(--superficie); box-shadow: 0 3px 14px #00000009; }
@@ -83,19 +84,19 @@ button[disabled], .botao[disabled] { background: #e0e0e0; color: #888; border-co
 .cabecalho-carrinho { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; min-width: 44px; min-height: 44px; color: var(--texto); text-decoration: none; border-radius: 50%; }
 .badge-carrinho { position: absolute; top: 2px; right: 0; background: var(--rosa); color: #fff; border-radius: 10px; font-size: 0.75rem; font-weight: 700; min-width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; padding: 0 4px; line-height: 1; }
 .item-carrinho-card { padding: 16px; margin-bottom: 12px; }
-.item-carrinho-grid { display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: center; }
+.item-carrinho-grid { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
 .item-carrinho-foto { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; background: #f0f0f0; }
 .item-carrinho-foto.reserva { display: flex; align-items: center; justify-content: center; }
 .item-carrinho-foto.reserva svg { width: 32px; height: 32px; stroke: #888; }
-.item-carrinho-info { display: flex; flex-direction: column; gap: 4px; }
+.item-carrinho-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .item-carrinho-titulo { font-weight: 700; text-decoration: none; color: inherit; font-size: 0.95rem; }
 .item-carrinho-preco-un { font-size: 0.85rem; color: #767676; }
-.item-carrinho-acoes { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.item-carrinho-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 6px; }
 .item-carrinho-acoes .seletor-quantidade { margin: 0; }
 .item-carrinho-acoes .seletor-quantidade button { width: 36px; height: 36px; min-height: 36px; font-size: 1.1rem; }
 .item-carrinho-acoes .seletor-quantidade input { width: 44px; min-height: 36px; padding: 4px; }
-.btn-remover-item { min-height: 44px; padding: 0 8px; font-size: 0.85rem; color: #a21d35; background: transparent; border: 0; cursor: pointer; text-decoration: underline; }
-.item-carrinho-subtotal { text-align: right; display: flex; flex-direction: column; justify-content: center; }
+.btn-remover-item { width: auto; margin-top: 0; justify-content: flex-start; min-height: 44px; padding: 0 8px; font-size: 0.85rem; color: #a21d35; background: transparent; border: 0; cursor: pointer; text-decoration: underline; }
+.item-carrinho-subtotal { text-align: right; display: flex; flex-direction: column; justify-content: center; white-space: nowrap; }
 .rotulo-subtotal { font-size: 0.75rem; color: #767676; text-transform: uppercase; }
 .valor-subtotal { font-size: 1.05rem; color: #a80d61; font-family: 'Poppins', sans-serif; }
 .resumo-carrinho { margin-top: 20px; }
@@ -114,9 +115,14 @@ button[disabled], .botao[disabled] { background: #e0e0e0; color: #888; border-co
 .secao-frete-cupom { display: flex; flex-direction: column; gap: 20px; }
 .bloco-frete-cupom h3 { font-size: 1.1rem; margin-bottom: 4px; }
 .instrucao-campo { font-size: 0.85rem; color: #686868; margin-bottom: 8px; }
-.campo-com-acao { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
-.campo-com-acao input { min-height: 44px; font-size: 1rem; }
+.campo-com-acao { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.campo-com-acao input { min-height: 44px; font-size: 1rem; width: 100%; min-width: 0; }
 .campo-com-acao button, .campo-com-acao .botao { min-height: 44px; width: auto; white-space: nowrap; padding: 10px 16px; font-size: 0.9rem; }
+
+@media (max-width: 480px) {
+  .item-carrinho-grid { grid-template-columns: 72px minmax(0, 1fr); }
+  .item-carrinho-subtotal { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px solid #eee; }
+}
 .feedback-info { margin-top: 10px; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; line-height: 1.4; overflow-wrap: anywhere; }
 .feedback-sucesso { background: #e8f5e9; border: 1px solid #a5d6a7; color: #205727; }
 .feedback-erro { background: #ffebee; border: 1px solid #ef9a9a; color: #a21d35; }
@@ -440,8 +446,12 @@ button[disabled], .botao[disabled] { background: #e0e0e0; color: #888; border-co
 }
 .painel-filtros-linha {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+.painel-filtros-linha input {
+  width: 100%;
+  min-width: 0;
 }
 .painel-filtros-acoes {
   display: flex;
