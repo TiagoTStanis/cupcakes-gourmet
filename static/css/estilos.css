@@ -161,7 +161,7 @@ button[disabled], .botao[disabled] { background: #e0e0e0; color: #888; border-co
 
 .aviso-pagamento { position: sticky; top: 0; z-index: 10; background: #E3F2FD; border: 1px solid #BBDEFB; color: #0D47A1; padding: 12px; }
 .pix-qr { width: min(240px, 100%); margin: 20px auto; }
-.pix-qr svg { display: block; width: 100%; height: auto; }
+.pix-qr svg { display: block; width: 100%; height: auto; stroke: none; }
 #pix-codigo { width: 100%; min-height: 88px; resize: vertical; overflow-wrap: anywhere; }
 #dados-cartao { min-width: 0; }
 #dados-cartao input, #dados-cartao select { width: 100%; min-width: 0; }
