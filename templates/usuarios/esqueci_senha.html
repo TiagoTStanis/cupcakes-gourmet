@@ -1,0 +1,2 @@
+{% extends "base.html" %}
+{% block conteudo %}<section class="cartao"><h1>Recuperar senha</h1><p>Informe seu e-mail para solicitar um link válido por 60 minutos.</p><form method="post">{% csrf_token %}{% include "usuarios/campos.html" %}<button type="submit">Solicitar recuperação</button></form><a class="link" href="{% url 'usuarios:login' %}">Voltar para entrar</a></section>{% endblock %}

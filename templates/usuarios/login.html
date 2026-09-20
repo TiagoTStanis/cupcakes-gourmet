@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block titulo %}Entrar | Cupcakes Gourmet{% endblock %}
+{% block conteudo %}<section class="cartao"><h1>Entrar</h1>{% if proxima %}<p class="aviso-demo">Sessão expirada ou acesso restrito. Entre na sua conta para continuar.</p>{% endif %}<form method="post">{% csrf_token %}<input type="hidden" name="next" value="{{ proxima }}">{% include "usuarios/campos.html" %}<button type="submit">Entrar</button></form><a class="link" href="{% url 'usuarios:esqueci_senha' %}">Esqueci minha senha</a><a class="link" href="{% url 'usuarios:cadastro' %}">Criar conta</a></section>{% endblock %}

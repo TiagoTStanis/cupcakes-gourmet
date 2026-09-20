@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block titulo %}Criar conta | Cupcakes Gourmet{% endblock %}
+{% block conteudo %}<section class="cartao"><h1>Criar conta</h1><form method="post">{% csrf_token %}{% include "usuarios/campos.html" %}<p id="forca-senha" class="forca" aria-live="polite">Use 8 caracteres, uma maiúscula e um número.</p><button type="submit">Cadastrar</button></form><a class="link" href="{% url 'usuarios:login' %}">Já tenho uma conta</a></section>{% endblock %}

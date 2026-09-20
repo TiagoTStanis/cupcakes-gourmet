@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="cartao"><h1>Meu perfil</h1><p>{{ user.email }}</p><form method="post">{% csrf_token %}<input type="hidden" name="acao" value="dados">{% include "usuarios/campos.html" %}<button type="submit">Salvar dados</button></form></section>
+<section class="cartao"><h2>Meus endereços</h2>{% for endereco in enderecos %}<article class="endereco"><h3>{{ endereco.logradouro }}, {{ endereco.numero }}</h3><p>{{ endereco.complemento }}<br>{{ endereco.bairro }} — {{ endereco.cidade }}/{{ endereco.uf }}<br>CEP {{ endereco.cep }}{% if endereco.principal %}<br><strong>Principal</strong>{% endif %}</p><form method="post" action="{% url 'usuarios:remover_endereco' endereco.pk %}">{% csrf_token %}<button class="secundario" type="submit">Remover endereço</button></form></article>{% empty %}<p>Você ainda não cadastrou endereços.</p>{% endfor %}</section>
+<section class="cartao"><h2>Cadastrar endereço</h2><form method="post">{% csrf_token %}<input type="hidden" name="acao" value="endereco">{% include "usuarios/campos.html" with formulario=endereco_form %}<button type="submit">Cadastrar endereço</button></form></section>
+<form method="post" action="{% url 'usuarios:logout' %}">{% csrf_token %}<button class="secundario" type="submit">Sair da conta</button></form>
+{% endblock %}

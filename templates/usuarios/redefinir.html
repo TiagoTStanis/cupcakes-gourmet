@@ -1,0 +1,2 @@
+{% extends "base.html" %}
+{% block conteudo %}<section class="cartao"><h1>Redefinir senha</h1>{% if valido %}<form method="post">{% csrf_token %}{% include "usuarios/campos.html" %}<p id="forca-senha" class="forca" aria-live="polite">Use 8 caracteres, uma maiúscula e um número.</p><button type="submit">Salvar nova senha</button></form>{% else %}<p class="mensagem error">Link de recuperação inválido, expirado ou já utilizado.</p><a class="link" href="{% url 'usuarios:esqueci_senha' %}">Solicitar outro link</a>{% endif %}</section>{% endblock %}
