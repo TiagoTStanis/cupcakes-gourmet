@@ -183,43 +183,52 @@ A suíte abrange testes de unidade e de integração organizados por domínio:
 
 ---
 
-## Publicação no PythonAnywhere (Plano Gratuito)
+## Publicação no PythonAnywhere (plano gratuito)
 
-Estruturei as configurações do projeto para permitir publicação rápida no plano gratuito do PythonAnywhere:
+O sistema publicado está em https://tiagotstanis.pythonanywhere.com. Foi assim que eu coloquei no ar:
 
-1. Acesse o painel do PythonAnywhere e abra um terminal **Bash**.
-2. Clone o repositório do projeto:
+1. Criei a conta gratuita (plano Beginner) em pythonanywhere.com e abri um terminal **Bash** em *Consoles*.
+2. Baixei o projeto e conferi as versões de Python disponíveis:
    ```text
-   git clone https://github.com/seu-usuario/cupcakes-gourmet.git
+   git clone https://github.com/TiagoTStanis/cupcakes-gourmet.git
    cd cupcakes-gourmet
+   ls /usr/bin/python3.*
    ```
-3. Crie e ative o ambiente virtual:
+3. Criei o ambiente virtual com o Python 3.13 (o mesmo em que desenvolvi e testei) e instalei as dependências:
    ```text
-   mkvirtualenv --python=/usr/bin/python3.10 cupcakes-venv
+   mkvirtualenv cupcakes-venv --python=/usr/bin/python3.13
    pip install -r requirements.txt
    ```
-4. Crie o arquivo `.env` com as configurações de produção:
+4. Criei o arquivo `.env` na pasta do projeto, com uma chave secreta gerada na hora. Troque `seu-usuario` pelo seu nome de usuário do PythonAnywhere, em minúsculas:
    ```text
-   SECRET_KEY=uma-chave-longa-e-aleatoria-de-sua-escolha
+   SECRET_KEY=<resultado de: python -c "import secrets; print(secrets.token_urlsafe(50))">
    DEBUG=False
    ALLOWED_HOSTS=seu-usuario.pythonanywhere.com
    CSRF_TRUSTED_ORIGINS=https://seu-usuario.pythonanywhere.com
    MODO_DEMO=True
-   ADMIN_PASSWORD=escolha-uma-senha-forte-so-sua
    ```
-   Deixe `MODO_DEMO=True` enquanto as pessoas testam: sem servidor de e-mail configurado, o link de ativação aparece na própria tela. O sistema lê esse arquivo `.env` sozinho, não precisa configurar mais nada no WSGI.
-5. Aplique as migrações e popule os dados:
+   Deixe `MODO_DEMO=True` enquanto as pessoas testam: sem servidor de e-mail, o link de ativação aparece na própria tela. O sistema lê esse `.env` sozinho, e recusa iniciar com `DEBUG=False` se a `SECRET_KEY` não for definida.
+5. Criei o banco, os arquivos estáticos e os dados de exemplo:
    ```text
    python manage.py migrate
+   python manage.py collectstatic --noinput
    python manage.py popular_dados
-   python manage.py collectstatic
    ```
-6. Na aba **Web** do PythonAnywhere:
-   - Defina o caminho do Virtualenv: `/home/seu-usuario/.virtualenvs/cupcakes-venv`
-   - No arquivo de configuração **WSGI**, descomente a seção referente ao Django, apontando o caminho do projeto para `/home/seu-usuario/cupcakes-gourmet` e definindo `os.environ['DJANGO_SETTINGS_MODULE'] = 'cupcakes_gourmet.settings'`.
-   - Na seção **Static Files**, mapeie os diretórios:
-     - URL: `/static/` -> Diretório: `/home/seu-usuario/cupcakes-gourmet/staticfiles`
-     - URL: `/media/` -> Diretório: `/home/seu-usuario/cupcakes-gourmet/media`
-   - Ative a opção **Force HTTPS**.
-   - Clique no botão verde **Reload seu-usuario.pythonanywhere.com**.
-7. Como lembrete para o plano gratuito, lembre-se de acessar a aba Web a cada 3 meses para clicar no botão de extensão de validade do aplicativo.
+   No final, o `popular_dados` mostra a senha do administrador, gerada na hora e exibida uma única vez. Anote. Se preferir escolher a senha, use `--senha-admin SuaSenha` ou a variável `ADMIN_PASSWORD`.
+6. Na aba **Web**, cliquei em *Add a new web app*, escolhi *Manual configuration* e **Python 3.13**. Depois preenchi:
+   - **Source code** e **Working directory**: `/home/seu-usuario/cupcakes-gourmet`
+   - **Virtualenv**: `/home/seu-usuario/.virtualenvs/cupcakes-venv`
+   - **Static files**: `/static/` apontando para `/home/seu-usuario/cupcakes-gourmet/staticfiles` e `/media/` apontando para `/home/seu-usuario/cupcakes-gourmet/media`
+   - **Force HTTPS**: ativado
+   - **Arquivo WSGI** (link na seção *Code*): troquei todo o conteúdo por
+     ```python
+     import os
+     import sys
+     sys.path.insert(0, "/home/seu-usuario/cupcakes-gourmet")
+     os.environ["DJANGO_SETTINGS_MODULE"] = "cupcakes_gourmet.settings"
+     from django.core.wsgi import get_wsgi_application
+     application = get_wsgi_application()
+     ```
+7. Cliquei no botão verde **Reload** e abri o endereço do site.
+
+No plano gratuito, o site é desativado depois de um mês. É preciso entrar na aba **Web** uma vez por mês e clicar em *Run until 1 month from today*.
