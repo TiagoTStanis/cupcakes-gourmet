@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Buscar Cupcakes — Cupcakes Gourmet{% endblock %}
+
+{% block conteudo %}
+<section class="cartao">
+  <h2>Buscar cupcakes</h2>
+  <form method="get" action="{% url 'catalogo:busca' %}" class="busca-campo-wrapper">
+    <label for="campo-busca" class="pular">Buscar pelo nome do cupcake</label>
+    <input type="search" id="campo-busca" name="q" value="{{ termo }}" placeholder="Digite o sabor ou nome..." autocomplete="off" autofocus>
+  </form>
+  <div id="contagem-resultados" class="destaque" aria-live="polite">{% if buscou and produtos %}{{ produtos|length }} resultado(s){% endif %}</div>
+</section>
+
+<div id="busca-vazia" {% if not buscou or produtos %}style="display: none;"{% endif %}>
+  {% if buscou and not produtos %}
+    <p class="vazio" data-status="Nenhum cupcake encontrado para '{{ termo }}'. Que tal explorar o catalogo completo?">Nenhum cupcake encontrado para '{{ termo }}'. Que tal explorar o <a href="{% url 'catalogo:vitrine' %}">catálogo completo</a>?</p>
+  {% endif %}
+</div>
+
+<div id="resultados-busca" class="grid-produtos">
+  {% for produto in produtos %}
+    <article class="produto-card">
+      <a href="{{ produto.get_absolute_url }}" class="produto-card-link">
+        {% if produto.imagem %}
+          <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="produto-card-imagem">
+        {% else %}
+          <div class="produto-card-imagem reserva" aria-label="Foto ilustrativa">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v1H6a3 3 0 0 0-3 3v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9a3 3 0 0 0-3-3h-2V6a4 4 0 0 0-4-4Z"/></svg>
+          </div>
+        {% endif %}
+        <div class="produto-card-corpo">
+          <span class="produto-card-categoria">{{ produto.categoria.nome }}</span>
+          <h3 class="produto-card-titulo">{{ produto.nome }}</h3>
+          <span class="produto-card-preco">R$ {{ produto.preco }}</span>
+        </div>
+      </a>
+    </article>
+  {% endfor %}
+</div>
+
+<script src="{% static 'js/busca.js' %}" defer></script>
+{% endblock %}

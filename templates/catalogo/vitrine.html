@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Catálogo — Cupcakes Gourmet{% endblock %}
+
+{% block conteudo %}
+<section class="banner-promocional">
+  <strong>Frete Grátis acima de R$ 150</strong>
+  <span>Use o cupom <strong>CUPCAKE10</strong></span>
+</section>
+
+{% if categorias %}
+<nav class="carrossel-categorias" aria-label="Categorias de cupcakes">
+  <a href="{% url 'catalogo:vitrine' %}{% if ordenacao_atual %}?ordenacao={{ ordenacao_atual }}{% endif %}" class="chip {% if not categoria_ativa %}ativo{% endif %}">Todos</a>
+  {% for cat in categorias %}
+    <a href="?categoria={{ cat.slug }}{% if ordenacao_atual %}&ordenacao={{ ordenacao_atual }}{% endif %}" class="chip {% if categoria_ativa == cat.slug %}ativo{% endif %}">{{ cat.nome }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+<form method="get" class="barra-ordenacao">
+  {% if categoria_ativa %}<input type="hidden" name="categoria" value="{{ categoria_ativa }}">{% endif %}
+  <label for="seletor-ordenacao">Ordenar por:</label>
+  <select id="seletor-ordenacao" name="ordenacao" onchange="this.form.submit()">
+    <option value="popularidade" {% if ordenacao_atual == "popularidade" %}selected{% endif %}>Mais populares</option>
+    <option value="menor_preco" {% if ordenacao_atual == "menor_preco" %}selected{% endif %}>Menor preço</option>
+    <option value="maior_preco" {% if ordenacao_atual == "maior_preco" %}selected{% endif %}>Maior preço</option>
+    <option value="nome" {% if ordenacao_atual == "nome" %}selected{% endif %}>Nome (A-Z)</option>
+  </select>
+</form>
+
+<div class="grid-produtos">
+  {% for produto in produtos %}
+    <article class="produto-card">
+      <a href="{{ produto.get_absolute_url }}" class="produto-card-link">
+        {% if produto.imagem %}
+          <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="produto-card-imagem">
+        {% else %}
+          <div class="produto-card-imagem reserva" aria-label="Foto ilustrativa">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a4 4 0 0 0-4 4v1H6a3 3 0 0 0-3 3v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9a3 3 0 0 0-3-3h-2V6a4 4 0 0 0-4-4Z"/></svg>
+          </div>
+        {% endif %}
+        <div class="produto-card-corpo">
+          <span class="produto-card-categoria">{{ produto.categoria.nome }}</span>
+          <h3 class="produto-card-titulo">{{ produto.nome }}</h3>
+          <span class="produto-card-preco">R$ {{ produto.preco }}</span>
+        </div>
+      </a>
+    </article>
+  {% empty %}
+    {% if categoria_ativa %}
+      <p class="vazio" data-status="Nenhum cupcake disponivel nesta categoria por enquanto.">Nenhum cupcake disponível nesta categoria por enquanto.</p>
+    {% else %}
+      <p class="vazio">Em breve traremos novidades!</p>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}
