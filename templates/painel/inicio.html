@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block titulo %}Painel Administrativo — Cupcakes Gourmet{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <h1>Painel Administrativo</h1>
+  {% include "painel/nav_painel.html" %}
+
+  <section class="cartao">
+    <h2>Visão Geral do Catálogo</h2>
+    <div class="grid-resumo-painel">
+      <a href="{% url 'painel:produtos_lista' %}?ativo=1" class="card-resumo-item">
+        <span class="card-resumo-numero">{{ produtos_ativos_total }}</span>
+        <span class="card-resumo-rotulo">Produtos ativos</span>
+      </a>
+      <a href="{% url 'painel:produtos_lista' %}?estoque_baixo=1" class="card-resumo-item card-resumo-alerta">
+        <span class="card-resumo-numero">{{ produtos_estoque_baixo_total }}</span>
+        <span class="card-resumo-rotulo">Estoque baixo (≤ 5 un.)</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Pedidos por Status</h2>
+    <div class="lista-resumo-status">
+      {% for item in pedidos_status %}
+      <a href="{% url 'painel:pedidos_lista' %}?status={{ item.status }}" class="linha-status-painel">
+        <span class="status-tag status-{{ item.status|lower }}">{{ item.nome }}</span>
+        <span class="linha-status-qtd"><strong>{{ item.total }}</strong> {% if item.total == 1 %}pedido{% else %}pedidos{% endif %}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Ações Rápidas</h2>
+    <div class="painel-acoes-rapidas">
+      <a class="botao" href="{% url 'painel:produto_criar' %}">Novo cupcake</a>
+      <a class="botao secundario" href="{% url 'painel:categoria_criar' %}">Nova categoria</a>
+      <a class="botao secundario" href="{% url 'painel:pedidos_lista' %}">Ver todos os pedidos</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

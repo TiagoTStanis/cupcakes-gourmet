@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gerenciar Pedidos — Painel{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <div class="painel-cabecalho-secao">
+    <h1>Pedidos</h1>
+  </div>
+  {% include "painel/nav_painel.html" %}
+
+  <form method="get" class="cartao painel-filtros">
+    <div class="campo">
+      <label for="campo-status">Status do pedido</label>
+      <select id="campo-status" name="status">
+        <option value="">Todos os status</option>
+        {% for st, label in status_choices %}
+          <option value="{{ st }}" {% if status_filtro == st %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="painel-filtros-linha">
+      <div class="campo">
+        <label for="campo-data-inicio">Data inicial</label>
+        <input type="date" id="campo-data-inicio" name="data_inicio" value="{{ data_inicio }}">
+      </div>
+      <div class="campo">
+        <label for="campo-data-fim">Data final</label>
+        <input type="date" id="campo-data-fim" name="data_fim" value="{{ data_fim }}">
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="campo-cliente">Cliente (nome ou e-mail)</label>
+      <input type="text" id="campo-cliente" name="cliente" value="{{ cliente_filtro }}" placeholder="Ex: Maria ou cliente@exemplo.com">
+    </div>
+
+    <div class="painel-filtros-acoes">
+      <button type="submit" class="botao">Filtrar</button>
+      {% if status_filtro or data_inicio or data_fim or cliente_filtro %}
+        <a href="{% url 'painel:pedidos_lista' %}" class="botao secundario">Limpar filtros</a>
+      {% endif %}
+    </div>
+  </form>
+
+  <div class="painel-pedidos-lista">
+    {% for pedido in pedidos %}
+    <article class="cartao pedido-card" id="pedido-{{ pedido.numero }}">
+      <header class="pedido-card-cabecalho">
+        <div>
+          <span class="pedido-numero">Pedido {{ pedido.numero }}</span>
+          <time class="pedido-data" datetime="{{ pedido.criado_em|date:'c' }}">{{ pedido.criado_em|date:"d/m/Y H:i" }}</time>
+          <span class="painel-pedido-cliente" style="font-size: 0.85rem; color: #444; display: block; margin-top: 2px;">
+            {{ pedido.usuario.nome_completo }} ({{ pedido.usuario.email }})
+          </span>
+        </div>
+        <span class="status-tag status-{{ pedido.status|lower }}">{{ pedido.get_status_display }}</span>
+      </header>
+
+      <div class="pedido-card-corpo">
+        <p class="pedido-itens-qtd">
+          {{ pedido.itens.count }} {% if pedido.itens.count == 1 %}item{% else %}itens{% endif %}
+          · {{ pedido.get_forma_pagamento_display }}
+        </p>
+        <p class="pedido-total">Total: <strong>R$ {{ pedido.valor_total }}</strong></p>
+      </div>
+
+      <footer class="pedido-card-acoes" style="grid-template-columns: 1fr;">
+        <a class="botao secundario" href="{% url 'painel:pedido_detalhe' pedido.numero %}">Ver detalhes e gerenciar</a>
+      </footer>
+    </article>
+    {% empty %}
+    <div class="cartao carrinho-vazio">
+      <p>Nenhum pedido encontrado para os filtros selecionados.</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if pagina.has_other_pages %}
+  <nav class="paginacao" aria-label="Navegação de páginas">
+    {% if pagina.has_previous %}
+      <a class="botao secundario paginacao-botao" href="?pagina={{ pagina.previous_page_number }}{{ querystring }}">Anterior</a>
+    {% else %}
+      <span class="botao secundario paginacao-botao desabilitado" aria-disabled="true">Anterior</span>
+    {% endif %}
+
+    <span class="paginacao-info">Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+
+    {% if pagina.has_next %}
+      <a class="botao secundario paginacao-botao" href="?pagina={{ pagina.next_page_number }}{{ querystring }}">Próxima</a>
+    {% else %}
+      <span class="botao secundario paginacao-botao desabilitado" aria-disabled="true">Próxima</span>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

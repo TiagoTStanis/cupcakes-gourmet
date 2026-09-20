@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ titulo }} — Painel{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <h1>{{ titulo }}</h1>
+  {% include "painel/nav_painel.html" %}
+
+  <form method="post" class="cartao" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div class="mensagem error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="campo">
+      <label for="{{ form.nome.id_for_label }}">Nome da categoria *</label>
+      {{ form.nome }}
+      {{ form.nome.errors }}
+    </div>
+
+    <div class="campo">
+      <label for="{{ form.slug.id_for_label }}">Slug</label>
+      {{ form.slug }}
+      {% if form.slug.help_text %}<small style="color: #686868; display: block; margin-top: 4px;">{{ form.slug.help_text }}</small>{% endif %}
+      {{ form.slug.errors }}
+    </div>
+
+    <div class="campo" style="display: flex; align-items: center; gap: 10px; margin: 20px 0;">
+      {{ form.ativa }}
+      <label for="{{ form.ativa.id_for_label }}" style="margin: 0; font-weight: 700; cursor: pointer;">Categoria ativa na vitrine</label>
+      {{ form.ativa.errors }}
+    </div>
+
+    <div style="display: grid; gap: 10px; margin-top: 24px;">
+      <button type="submit" class="botao">Salvar categoria</button>
+      <a href="{% url 'painel:categorias_lista' %}" class="botao secundario">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

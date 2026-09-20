@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block titulo %}Pedido {{ pedido.numero }} — Painel{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <div class="painel-cabecalho-secao">
+    <h1>Pedido {{ pedido.numero }}</h1>
+  </div>
+  {% include "painel/nav_painel.html" %}
+
+  <section class="cartao">
+    <div class="pedido-card-cabecalho" style="margin-bottom: 12px;">
+      <div>
+        <span class="pedido-numero">Status atual</span>
+        <time class="pedido-data" datetime="{{ pedido.criado_em|date:'c' }}">Realizado em {{ pedido.criado_em|date:"d/m/Y H:i" }}</time>
+      </div>
+      <span class="status-tag status-{{ pedido.status|lower }}">{{ pedido.get_status_display }}</span>
+    </div>
+
+    {% if proximo_status %}
+      <form method="post" action="{% url 'painel:pedido_avancar_status' pedido.numero %}" style="margin: 16px 0 20px;">
+        {% csrf_token %}
+        <button type="submit" class="botao">
+          Avançar para {{ proximo_status_nome }}
+        </button>
+      </form>
+    {% endif %}
+
+    <div class="painel-cancelamento-bloco" style="border-top: 1px solid #eee; padding-top: 16px; margin-top: 16px;">
+      <h3 style="margin-bottom: 8px;">Cancelamento</h3>
+      <form method="post" action="{% url 'painel:pedido_cancelar' pedido.numero %}">
+        {% csrf_token %}
+        <div class="campo" style="margin: 8px 0 12px;">
+          <label for="campo-motivo-cancelamento">Motivo do cancelamento (opcional)</label>
+          <input type="text" id="campo-motivo-cancelamento" name="motivo" placeholder="Ex: Solicitação do cliente ou falta de ingrediente" {% if not pode_cancelar %}disabled{% endif %}>
+        </div>
+
+        {% if pode_cancelar %}
+          <button type="submit" class="botao secundario" style="border-color: #a21d35; color: #a21d35;">
+            Cancelar pedido
+          </button>
+        {% else %}
+          <button type="button" class="botao secundario desabilitado" disabled aria-disabled="true" style="border-color: #ccc; color: #888; cursor: not-allowed;">
+            Cancelar pedido
+          </button>
+          <p class="ajuda-bloqueio" style="color: #a21d35; font-size: 0.85rem; margin-top: 6px;">
+            {{ motivo_bloqueio }}
+          </p>
+        {% endif %}
+      </form>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Dados do Cliente</h2>
+    <p style="margin: 4px 0;"><strong>Nome:</strong> {{ pedido.usuario.nome_completo }}</p>
+    <p style="margin: 4px 0;"><strong>E-mail:</strong> {{ pedido.usuario.email }}</p>
+    {% if pedido.usuario.telefone %}
+      <p style="margin: 4px 0;"><strong>Telefone:</strong> {{ pedido.usuario.telefone }}</p>
+    {% endif %}
+  </section>
+
+  <section class="cartao">
+    <h2>Endereço de Entrega</h2>
+    <p style="white-space: pre-line; line-height: 1.5; margin: 4px 0;">{{ pedido.endereco_entrega }}</p>
+  </section>
+
+  <section class="cartao">
+    <h2>Itens do Pedido</h2>
+    <ul class="checkout-itens">
+      {% for item in pedido.itens.all %}
+      <li style="border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
+        <div>
+          <strong>{{ item.nome_produto }}</strong>
+          <small style="color: #686868;">{{ item.quantidade }}x R$ {{ item.preco_unitario }}</small>
+        </div>
+        <strong>R$ {{ item.subtotal }}</strong>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div style="margin-top: 16px;">
+      <div class="linha-resumo">
+        <span>Subtotal</span>
+        <span>R$ {{ pedido.subtotal }}</span>
+      </div>
+      {% if pedido.valor_desconto > 0 %}
+      <div class="linha-resumo linha-desconto">
+        <span>Desconto {% if pedido.cupom %}(Cupom {{ pedido.cupom.codigo }}){% endif %}</span>
+        <span>- R$ {{ pedido.valor_desconto }}</span>
+      </div>
+      {% endif %}
+      <div class="linha-resumo">
+        <span>Frete</span>
+        <span>R$ {{ pedido.valor_frete }}</span>
+      </div>
+      <div class="linha-resumo linha-total">
+        <span>Total</span>
+        <strong>R$ {{ pedido.valor_total }}</strong>
+      </div>
+      <p style="font-size: 0.9rem; color: #686868; margin-top: 8px;">
+        Forma de pagamento: <strong>{{ pedido.get_forma_pagamento_display }}</strong>
+      </p>
+    </div>
+  </section>
+
+  <section class="cartao">
+    <h2>Histórico do Pedido</h2>
+    <ul class="painel-historico-lista" style="list-style: none; padding: 0; margin: 12px 0 0;">
+      {% for registro in historico %}
+      <li style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0;">
+        <span class="status-tag status-{{ registro.status|lower }}">{{ registro.get_status_display }}</span>
+        <time style="font-size: 0.85rem; color: #686868;" datetime="{{ registro.criado_em|date:'c' }}">
+          {{ registro.criado_em|date:"d/m/Y H:i" }}
+        </time>
+      </li>
+      {% empty %}
+      <li style="color: #686868;">Nenhum registro de histórico.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div style="margin-bottom: 24px;">
+    <a href="{% url 'painel:pedidos_lista' %}" class="botao secundario">← Voltar para a lista de pedidos</a>
+  </div>
+</div>
+{% endblock %}

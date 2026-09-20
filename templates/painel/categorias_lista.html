@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block titulo %}Gerenciar Categorias — Painel{% endblock %}
+
+{% block conteudo %}
+<div class="checkout-pagina">
+  <div class="painel-cabecalho-secao">
+    <h1>Categorias</h1>
+    <a class="botao painel-btn-novo" href="{% url 'painel:categoria_criar' %}">+ Nova categoria</a>
+  </div>
+  {% include "painel/nav_painel.html" %}
+
+  <div class="painel-produtos-lista">
+    {% for cat in categorias %}
+    <article class="cartao painel-produto-card" id="categoria-{{ cat.pk }}">
+      <div class="painel-produto-topo">
+        <div class="painel-produto-info">
+          <h2 class="painel-produto-nome" style="margin: 0 0 4px;">{{ cat.nome }}</h2>
+          <span class="painel-produto-slug">slug: {{ cat.slug }}</span>
+        </div>
+        <span class="status-tag {% if cat.ativa %}status-pagamento_confirmado{% else %}status-aguardando_pagamento{% endif %}">
+          {% if cat.ativa %}Ativa{% else %}Inativa{% endif %}
+        </span>
+      </div>
+
+      <div class="painel-produto-dados">
+        <span>{{ cat.produtos.count }} {% if cat.produtos.count == 1 %}cupcake vinculado{% else %}cupcakes vinculados{% endif %}</span>
+      </div>
+
+      <div class="painel-produto-acoes">
+        <a class="botao secundario" href="{% url 'painel:categoria_editar' cat.pk %}">Editar nome</a>
+        {% if cat.ativa %}
+          <form method="post" action="{% url 'painel:categoria_desativar' cat.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="botao secundario">Desativar</button>
+          </form>
+        {% else %}
+          <form method="post" action="{% url 'painel:categoria_reativar' cat.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="botao">Reativar</button>
+          </form>
+        {% endif %}
+      </div>
+    </article>
+    {% empty %}
+    <div class="cartao carrinho-vazio">
+      <p>Nenhuma categoria cadastrada ainda.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

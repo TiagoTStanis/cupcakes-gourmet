@@ -1,0 +1,6 @@
+<nav class="carrossel-categorias painel-nav" aria-label="Navegação do painel administrativo">
+  <a href="{% url 'painel:inicio' %}" class="chip{% if secao_painel == 'inicio' %} ativo{% endif %}">Início</a>
+  <a href="{% url 'painel:produtos_lista' %}" class="chip{% if secao_painel == 'produtos' %} ativo{% endif %}">Cupcakes</a>
+  <a href="{% url 'painel:categorias_lista' %}" class="chip{% if secao_painel == 'categorias' %} ativo{% endif %}">Categorias</a>
+  <a href="{% url 'painel:pedidos_lista' %}" class="chip{% if secao_painel == 'pedidos' %} ativo{% endif %}">Pedidos</a>
+</nav>
