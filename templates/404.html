@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block titulo %}Página não encontrada — Cupcakes Gourmet{% endblock %}
+
+{% block conteudo %}
+<div class="cartao pagina-erro" style="text-align: center; padding: 40px 20px;">
+  <h1 style="color: #a21d35; margin-bottom: 12px;">Página Não Encontrada</h1>
+  <p style="margin-bottom: 24px; color: #686868;">A página solicitada não foi encontrada ou pode ter sido removida da nossa confeitaria.</p>
+  <a class="botao" href="{% url 'inicio' %}" style="display: inline-flex; width: auto; min-width: 200px;">Voltar para o início</a>
+</div>
+{% endblock %}

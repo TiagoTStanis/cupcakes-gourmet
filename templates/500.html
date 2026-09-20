@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Erro no servidor — Cupcakes Gourmet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rosa: #E91E8C;
+      --dourado: #F5A623;
+      --fundo: #F5F5F5;
+      --superficie: #FFFFFF;
+      --texto: #212121;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font-family: 'Nunito', sans-serif;
+      line-height: 1.6;
+    }
+    .cabecalho {
+      max-width: 480px;
+      margin: auto;
+      padding: 24px 18px 12px;
+      text-align: center;
+    }
+    .cabecalho a {
+      font: 600 1.35rem 'Poppins', sans-serif;
+      color: #a80d61;
+      text-decoration: none;
+    }
+    .cabecalho span {
+      display: block;
+      font-size: .9rem;
+      color: #686868;
+    }
+    main {
+      max-width: 480px;
+      margin: auto;
+      padding: 12px 16px 40px;
+    }
+    .cartao {
+      padding: 40px 20px;
+      border-radius: 18px;
+      background: var(--superficie);
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.65rem;
+      color: #a21d35;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+    p {
+      margin-bottom: 24px;
+      color: #686868;
+    }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--rosa);
+      color: #212121;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      min-width: 200px;
+    }
+    .botao:hover { filter: brightness(.95); }
+  </style>
+</head>
+<body>
+  <header class="cabecalho">
+    <a href="/">Cupcakes <strong>Gourmet</strong></a>
+    <span>Confeitaria artesanal</span>
+  </header>
+  <main>
+    <div class="cartao">
+      <h1>Erro no Servidor</h1>
+      <p>Ocorreu um erro inesperado no servidor. Nossa equipe está verificando. Por favor, tente novamente em instantes.</p>
+      <a class="botao" href="/">Voltar para o início</a>
+    </div>
+  </main>
+</body>
+</html>

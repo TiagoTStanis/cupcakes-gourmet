@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="same-origin">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block titulo %}Cupcakes Gourmet{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+  <script src="{% static 'js/senha.js' %}" defer></script>
+  <script src="{% static 'js/carrinho.js' %}" defer></script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Ir para o conteúdo</a>
+  <header class="cabecalho">
+    <div class="cabecalho-barra">
+      <div class="cabecalho-marca">
+        <a href="{% url 'inicio' %}">Cupcakes <strong>Gourmet</strong></a>
+        <span>Confeitaria artesanal</span>
+      </div>
+      {% if request.user.is_staff %}
+      <a href="{% url 'painel:inicio' %}" class="cabecalho-painel-link" title="Painel Administrativo">Painel</a>
+      {% endif %}
+      <a href="{% url 'pedidos:notificacoes' %}" class="cabecalho-sino" aria-label="Notificações: {{ notificacoes_nao_lidas }} não lidas">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9 M10 21h4"/></svg>
+        <span class="badge-carrinho" id="badge-notificacoes">{{ notificacoes_nao_lidas }}</span>
+      </a>
+      <a href="{% url 'carrinho:detalhe' %}" class="cabecalho-carrinho" aria-label="Carrinho de compras">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="badge-carrinho" id="badge-carrinho" {% if not carrinho_total_itens %}style="display: none;"{% endif %}>{{ carrinho_total_itens }}</span>
+      </a>
+    </div>
+  </header>
+  <main id="conteudo" tabindex="-1">
+    {% if messages %}<div aria-live="polite">{% for mensagem in messages %}<div class="mensagem {{ mensagem.tags }}">{{ mensagem }}</div>{% endfor %}</div>{% endif %}
+    {% if link_demo %}<aside class="aviso-demo"><strong>Modo demonstração</strong><p>Use este link para testar o fluxo sem acessar o e-mail.</p><a href="{{ link_demo }}">{{ link_demo }}</a></aside>{% endif %}
+    {% block conteudo %}{% endblock %}
+  </main>
+  <nav class="navegacao" aria-label="Navegação principal">
+    <a href="{% url 'catalogo:vitrine' %}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z"/></svg>Home</a>
+    <a href="{% url 'catalogo:busca' %}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>Busca</a>
+    <a href="{% url 'pedidos:historico' %}"{% if request.resolver_match.url_name == 'historico' or request.resolver_match.url_name == 'pedido_detalhe' or request.resolver_match.url_name == 'notificacoes' %} class="ativo" aria-current="page"{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14v18l-3-2-4 2-4-2-3 2Z M8 8h8 M8 12h8"/></svg>Pedidos</a>
+    <a href="{% url 'usuarios:perfil' %}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg>Perfil</a>
+  </nav>
+  <div id="snackbar-container" class="snackbar-container" aria-live="polite"></div>
+</body>
+</html>
