@@ -39,7 +39,7 @@ python -m pytest tests/test_usuarios.py
 
 ### 2.2. Distribuição dos Testes por Área
 
-A suíte completa conta com **156 funções de teste reais (`def test_`)**, totalizando 192 casos de execução graças às parametrizações com `@pytest.mark.parametrize`. A tabela a seguir detalha a quantidade exata de testes por arquivo e as regras cobertas:
+A suíte completa conta com **158 funções de teste reais (`def test_`)**, totalizando 194 casos de execução graças às parametrizações com `@pytest.mark.parametrize`. A tabela a seguir detalha a quantidade exata de testes por arquivo e as regras cobertas:
 
 Os testes automatizados exercitam as regras de negócio, os serviços e as views, usando o cliente de teste do Django e conferindo o HTML devolvido. O comportamento do JavaScript (busca com debounce, máscaras, contadores) e a aparência no celular não são cobertos por testes automáticos: foram conferidos à mão por mim e vão ser avaliados pelas pessoas que testarem o sistema.
 
@@ -56,7 +56,7 @@ Os testes automatizados exercitam as regras de negócio, os serviços e as views
 | **Painel Administrativo** | `tests/test_painel.py` | 18 | Restrição de acesso ao painel (`/painel/`) para usuários `is_staff`, CRUD de cupcakes com upload seguro via Pillow, gestão de categorias, filtros de pedidos por status/cliente/período e cancelamento com reposição de estoque permitido apenas para pedidos não despachados. | `test_cliente_comum_recebe_403_em_todas_as_rotas_do_painel`<br>`test_criar_produto_valido_aparece_na_vitrine_imediatamente`<br>`test_desativar_mantem_no_banco_some_da_vitrine_mas_permanece_em_pedidos_antigos`<br>`test_cancelar_em_saiu_para_entrega_e_entregue_e_bloqueado` |
 | **Erros e Carga de Dados** | `tests/test_erros_dados.py` | 8 | Renderização das telas de erro customizadas (404, 500 sem dependência do banco, tela de fallback offline), comando de carga `popular_dados` (criação idempotente de 12 cupcakes com imagens reais, categorias, fretes, cupom ativo e credenciais de teste). | `test_pagina_404_renderiza_template_com_status_404`<br>`test_pagina_500_renderiza_template_sem_depender_do_banco`<br>`test_popular_dados_cria_doze_produtos_com_imagem_no_disco`<br>`test_popular_dados_executado_duas_vezes_nao_duplica_registros` |
 | **Regressões** | `tests/test_regressoes.py` | 9 | Testes de regressão de problemas achados na revisão do código: preço zero ou negativo, senha do administrador informada ou gerada, PIX vencido cancelado ao listar, erro de estoque no painel e escape de HTML na busca. | `test_preco_zero_ou_negativo_e_rejeitado`<br>`test_pix_vencido_e_cancelado_ao_listar`<br>`test_historico_mostra_pix_vencido_como_cancelado`<br>`test_busca_js_escapa_o_texto_antes_de_inserir_no_html` |
-| **TOTAL GERAL** | **11 Arquivos** | **156** | **Cobertura completa de todos os domínios do sistema.** | |
+| **TOTAL GERAL** | **11 Arquivos** | **158** | **Cobertura completa de todos os domínios do sistema.** | |
 
 ---
 
@@ -169,9 +169,9 @@ Abaixo está o modelo formal em branco a ser preenchido após a aplicação prá
 
 ## 7. Resumo dos Testes Automatizados
 - Framework: pytest com pytest-django
-- Total de Funções de Teste (`def test_`): 156
-- Total de Casos Executados (com parametrização): 192
-- Status da Suíte Automatizada: [preencher - ex: 192 aprovados em X segundos]
+- Total de Funções de Teste (`def test_`): 158
+- Total de Casos Executados (com parametrização): 194
+- Status da Suíte Automatizada: [preencher - ex: 194 aprovados em X segundos]
 
 ## 8. Lições Aprendidas e Observações de Usabilidade
 - [preencher com apontamentos qualitativos observados durante a interação dos participantes]
