@@ -183,6 +183,12 @@ A suíte abrange testes de unidade e de integração organizados por domínio:
 
 ---
 
+## Documentação
+
+Toda a documentação do projeto está na pasta [docs](docs/README.md), organizada pelas três situações da atividade: planejamento e modelagem (UML, IHC e projeto de dados), desenvolvimento (manual de uso e mapa do código) e testes com o modelo do laudo.
+
+---
+
 ## Publicação no PythonAnywhere (plano gratuito)
 
 O sistema publicado está em https://tiagotstanis.pythonanywhere.com. Foi assim que eu coloquei no ar:

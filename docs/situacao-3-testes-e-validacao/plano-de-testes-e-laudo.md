@@ -41,6 +41,8 @@ python -m pytest tests/test_usuarios.py
 
 A suíte completa conta com **156 funções de teste reais (`def test_`)**, totalizando 192 casos de execução graças às parametrizações com `@pytest.mark.parametrize`. A tabela a seguir detalha a quantidade exata de testes por arquivo e as regras cobertas:
 
+Os testes automatizados exercitam as regras de negócio, os serviços e as views, usando o cliente de teste do Django e conferindo o HTML devolvido. O comportamento do JavaScript (busca com debounce, máscaras, contadores) e a aparência no celular não são cobertos por testes automáticos: foram conferidos à mão por mim e vão ser avaliados pelas pessoas que testarem o sistema.
+
 | Área | Arquivo | Qtd. `def test_` | O que cobre | Exemplos de Testes Reais |
 |---|---|:---:|---|---|
 | **Usuários e Contas** | `tests/test_usuarios.py` | 14 | Validação de senha forte (mínimo 8 caracteres, maiúscula e número), bloqueio de 15 minutos após 3 falhas consecutivas, ativação por token, recuperação de senha com validade de 60 minutos, uso único de token e segurança de endereços no perfil. | `test_rejeita_senha_fora_dos_requisitos`<br>`test_bloqueia_tres_erros_por_exatos_quinze_minutos`<br>`test_token_expira_exatamente_em_sessenta_minutos`<br>`test_fluxo_cadastro_ativacao_login_e_logout` |

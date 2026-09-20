@@ -210,3 +210,25 @@ Na etapa de concepção inicial do PITE I, foram elaborados os primeiros wirefra
 3. **Navegação livre para visitantes sem bloqueio por login prematuro**:
    - *No PITE I*: a proposta previa que qualquer pessoa precisava criar conta ou logar antes mesmo de visualizar o catálogo completo de cupcakes.
    - *Como ficou no PITE II*: corrigi essa fricção permitindo navegação 100% aberta e irrestrita na vitrine, categorias, busca textual e página de detalhes. O usuário só é convidado a fazer login no exato momento em que decide adicionar um doce à sua sacola de compras, sendo redirecionado de volta para o produto após o login através do parâmetro `next`, reduzindo drasticamente o abandono de novos clientes.
+
+## Mapa conceitual do domínio
+
+Além do mapa navegacional, fiz um mapa conceitual mostrando como os conceitos da confeitaria se ligam. Ele ajuda a explicar as telas e o vocabulário usado na interface.
+
+```mermaid
+flowchart LR
+    Cliente["Cliente"] -->|escolhe| Cupcake["Cupcake"]
+    Cupcake -->|pertence a| Categoria["Categoria"]
+    Cupcake -->|informa| Alergenicos["Alergênicos e ingredientes"]
+    Cliente -->|separa no| Carrinho["Carrinho"]
+    Carrinho -->|calcula| Frete["Frete por UF"]
+    Carrinho -->|pode usar| Cupom["Cupom de desconto"]
+    Carrinho -->|segura unidades em| Reserva["Reserva de estoque"]
+    Carrinho -->|vira| Pedido["Pedido"]
+    Pedido -->|é pago com| Pagamento["Cartão ou PIX simulado"]
+    Pedido -->|passa por| Status["Status e linha do tempo"]
+    Status -->|gera| Notificacao["Notificação interna"]
+    Administrador["Administrador"] -->|mantém| Cupcake
+    Administrador -->|acompanha e cancela| Pedido
+```
+
